@@ -1,0 +1,57 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+type ContactData = {
+    name: string,
+    email: string,
+    subject: string,
+    message: string,
+};
+
+const WithTypeScript: React.FC = () => {
+    const { register, handleSubmit, watch } = useForm<ContactData>();
+    const [dataSubmitted, setDataSubmitted] = useState<ContactData>();
+
+    const onSubmit = (data: ContactData) => {
+        setDataSubmitted({
+            name: data.name,
+            email: data.email,
+            subject: data.subject,
+            message: data.message,
+        });
+    }
+
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="header">
+                <h4>Watching</h4>
+                <ul>
+                    <li>Nome: {watch('name')}</li>
+                    <li>E-mail: {watch('email')}</li>
+                </ul>
+                <h4>Dados</h4>
+                <pre>{JSON.stringify(dataSubmitted, null, "\t")}</pre>
+            </div>
+            <div className="form__group">
+                <label htmlFor="name">Nome</label>
+                <input type="text" id="name" {...register("name")} />
+            </div>
+            <div className="form__group">
+                <label htmlFor="email">E-mail</label>
+                <input type="text" id="email" {...register("email")} />
+            </div>
+            <div className="form__group">
+                <label htmlFor="subject">Assunto</label>
+                <input type="text" id="subject" {...register("subject")} />
+            </div>
+            <div className="form__group">
+                <label htmlFor="message">Mensagem</label>
+                <textarea id="message" {...register("message")}></textarea>
+            </div>
+
+            <button>Enviar</button>
+        </form>
+    );
+}
+
+export default WithTypeScript;
